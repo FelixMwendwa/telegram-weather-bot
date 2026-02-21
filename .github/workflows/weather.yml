@@ -1,0 +1,30 @@
+name: Telegram Weather Bot
+
+on:
+  schedule:
+    - cron: '0 3 * * *'   # 6 AM Kenya time
+    - cron: '0 9 * * *'   # 12 PM (noon) Kenya time ✅ added
+    - cron: '0 10 * * *'  # 1 PM Kenya time
+    - cron: '0 15 * * *'  # 6 PM Kenya time
+  workflow_dispatch:  # optional manual trigger
+
+jobs:
+  run-weather-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Run Weather Bot
+        run: python weather_bot.py
+        env:
+          BOT_TOKEN: ${{ secrets.BOT_TOKEN }}
+          CHAT_ID: ${{ secrets.CHAT_ID }}
+          API_KEY: ${{ secrets.API_KEY }}
